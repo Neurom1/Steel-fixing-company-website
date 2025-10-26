@@ -120,6 +120,42 @@
   <footer class="bg-gray-800 text-white text-center py-6">
     <p>&copy; 2025 SteelfixPro. All rights reserved.</p>
   </footer>
+<!-- Firebase SDK -->
+<script type="module">
+  // Import Firebase modules
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
 
+  // Your Firebase config
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Handle form submission
+  document.getElementById("quoteForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const email = form.email.value;
+    const details = form.details.value;
+
+    try {
+      await addDoc(collection(db, "quotes"), { name, email, details, timestamp: new Date() });
+      form.reset();
+      document.getElementById("formMessage").classList.remove("hidden");
+    } catch (error) {
+      alert("Error submitting form: " + error.message);
+    }
+  });
+</script>
 </body>
 </html>
